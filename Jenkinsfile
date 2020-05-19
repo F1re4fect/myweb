@@ -2,7 +2,6 @@ pipeline {
 
   environment {
     registry = "778557655318.dkr.ecr.us-west-1.amazonaws.com/myweb:$BUILD_NUMBER"
-    DOCKER_TAG  = "${(env.BRANCH_NAME == 'master' ? 'dev-' : (env.BRANCH_NAME == 'hotfix' ? 'hotfix-' : '' )) + env.BUILD_NUMBER}"
     dockerImage = ""
   }
 
