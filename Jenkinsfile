@@ -1,7 +1,8 @@
 pipeline {
 
   environment {
-    registry = "192.168.1.81:5000/justme/myweb"
+    registry = "778557655318.dkr.ecr.us-west-1.amazonaws.com/myweb:$BUILD_NUMBER"
+    DOCKER_TAG  = "${(env.BRANCH_NAME == 'master' ? 'dev-' : (env.BRANCH_NAME == 'hotfix' ? 'hotfix-' : '' )) + env.BUILD_NUMBER}"
     dockerImage = ""
   }
 
@@ -11,36 +12,37 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git 'https://github.com/justmeandopensource/playjenkins.git'
+        git 'https://github.com/F1re4fect/myweb.git'
       }
     }
 
     stage('Build image') {
-      steps{
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+      steps {
+        container('docker') {
+          sh "#!/bin/sh -e\ndocker build -t 778557655318.dkr.ecr.us-west-1.amazonaws.com/myweb:${BUILD_NUMBER} ."
         }
       }
     }
 
     stage('Push Image') {
       steps{
-        script {
-          docker.withRegistry( "" ) {
-            dockerImage.push()
-          }
-        }
-      }
+        container('docker') {
+	      script {
+		    docker.withRegistry('https://778557655318.dkr.ecr.us-west-1.amazonaws.com', 'ecr:us-west-1:carter-ecr') {
+    		docker.image("778557655318.dkr.ecr.us-west-1.amazonaws.com/myweb:${BUILD_NUMBER}").push()
+  		}
+	  }     
+     }
     }
+   }
 
     stage('Deploy App') {
       steps {
         script {
-          kubernetesDeploy(configs: "myweb.yaml", kubeconfigId: "mykubeconfig")
+          kubernetesDeploy(configs: "myweb.yaml", dockerCredentials: [[credentialsId: 'ecr:us-west-1:carter-ecr', url: 'http://778557655318.dkr.ecr.us-west-1.amazonaws.com/myweb']], kubeconfigId: "mykubeconfig")
         }
       }
     }
 
   }
-
 }
