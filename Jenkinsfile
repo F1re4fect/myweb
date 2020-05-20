@@ -17,19 +17,19 @@ pipeline {
 
     stage('Build image') {
       steps {
-        container('docker') {
+   //     container('docker') {
           sh "#!/bin/sh -e\ndocker build -t 778557655318.dkr.ecr.us-west-1.amazonaws.com/myweb:${BUILD_NUMBER} ."
-        }
+   //     }
       }
     }
 
     stage('Push Image') {
       steps{
-        container('docker') {
+   //     container('docker') {
 	      script {
 		    docker.withRegistry('https://778557655318.dkr.ecr.us-west-1.amazonaws.com', 'ecr:us-west-1:carter-ecr') {
     		docker.image("778557655318.dkr.ecr.us-west-1.amazonaws.com/myweb:${BUILD_NUMBER}").push()
-  		}
+  //		}
 	  }     
      }
     }
