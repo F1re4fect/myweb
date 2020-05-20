@@ -15,10 +15,12 @@ spec:
       labels:
         app: myweb
     spec:
+      imagePullSecrets:
+        - name: ecr-docker-login
       containers:
-      - image: 778557655318.dkr.ecr.us-west-1.amazonaws.com/myweb:$BUILD_NUMBER
-        imagePullPolicy: Always
-        name: myweb
+        - image: 778557655318.dkr.ecr.us-west-1.amazonaws.com/myweb:$BUILD_NUMBER
+          imagePullPolicy: Always
+          name: myweb
 
 ---
 apiVersion: v1
