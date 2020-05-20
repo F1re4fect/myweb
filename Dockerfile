@@ -1,4 +1,4 @@
-FROM httpd:2.4
+FROM httpd:latest
 COPY ./index.html /usr/local/apache2/htdocs/
 COPY ./left-sidebar.html /usr/local/apache2/htdocs/
 COPY ./no-sidebar.html /usr/local/apache2/htdocs/
