@@ -1,2 +1,1 @@
-# playjenkins
-Jenkins Playground
+###Sample Web Site docker image and deployment
