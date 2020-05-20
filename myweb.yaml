@@ -2,6 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: ns-ecr-renew
   labels:
     app: myweb
   name: myweb
@@ -26,6 +27,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: ns-ecr-renew
   labels:
     app: myweb
   name: myweb
