@@ -15,16 +15,17 @@ pipeline {
       }
     }
 
-    stage('SonarQube analysis') {
-	steps {
-	  script {
-	    scannerHome = tool 'SonarQubeScanner'
-	  }
-          withSonarQubeEnv('sonarqube') {
-		  sh """${scannerHo/bin/sonar-scanner -Dsonar.projectKey=myweb -Dsonar.sources=."""
-      }
-     } 
+stage('Sonarqube') {
+    environment {
+        scannerHome = tool 'SonarQubeScanner'
+    }    steps {
+        withSonarQubeEnv('sonarqube') {
+            sh "${scannerHome}/bin/sonar-scanner"
+        }        timeout(time: 10, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+        }
     }
+}
 
     stage('Build image') {
       steps {
