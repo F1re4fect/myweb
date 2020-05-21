@@ -21,11 +21,7 @@ pipeline {
 	    scannerHome = tool 'SonarQubeScanner'
 	  }
           withSonarQubeEnv('sonarqube') {
-		  sh """
-   ${scannerHo/bin/sonar-scanner \
-   -Dsonar.projectKey=myweb \
-   -Dsonar.sources=. \
-"""
+		  sh """${scannerHo/bin/sonar-scanner -Dsonar.projectKey=myweb -Dsonar.sources=."""
       }
      } 
     }
